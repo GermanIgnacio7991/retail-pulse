@@ -32,7 +32,7 @@ Un e-commerce necesita responder todos los días, sin trabajo manual:
 
 | Capa | Herramienta | Qué hace |
 |---|---|---|
-| Ingesta | Python, `requests`, `pandas` | Descarga dólar, UF e IPC y los carga en BigQuery (idempotente) |
+| Ingesta | Python, `requests`, `pandas` | Descarga dólar, UF e IPC, avisa si alguno viene atrasado en la fuente y los carga en BigQuery (idempotente) |
 | Almacenamiento | BigQuery | Datasets `raw`, `staging`, `marts` |
 | Transformación | dbt | Limpieza, modelado dimensional y conversión USD→CLP |
 | Calidad | dbt tests | Unicidad, nulos, integridad referencial, frescura de fuentes |

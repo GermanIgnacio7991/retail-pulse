@@ -29,6 +29,10 @@ API_BASE = "https://mindicador.cl/api"
 INDICADORES = ["dolar", "uf", "ipc"]
 TABLA_DESTINO = "indicadores_economicos"
 
+# Días máximos entre el último dato y hoy antes de avisar.
+# El IPC es mensual: el INE lo publica ~día 8 del mes siguiente y mindicador lo fecha el día 1.
+MAX_DIAS_ATRASO = {"dolar": 7, "uf": 7, "ipc": 70}
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)s | %(message)s",
@@ -85,6 +89,22 @@ def transformar(df: pd.DataFrame) -> pd.DataFrame:
     return df.sort_values(["indicador", "fecha"]).reset_index(drop=True)
 
 
+def revisar_atraso(df: pd.DataFrame) -> None:
+    """Avisa si algún indicador dejó de actualizarse en la fuente (no detiene la carga)."""
+    hoy = date.today()
+    ultimas = df.groupby("indicador")["fecha"].max()
+    for indicador, maximo in MAX_DIAS_ATRASO.items():
+        if indicador not in ultimas:
+            log.warning("%s: la API no devolvió ningún dato", indicador)
+            continue
+        dias = (hoy - ultimas[indicador]).days
+        if dias > maximo:
+            log.warning(
+                "%s desactualizado: último dato %s (%d días, máximo %d)",
+                indicador, ultimas[indicador], dias, maximo,
+            )
+
+
 def cargar_bigquery(df: pd.DataFrame) -> None:
     from google.cloud import bigquery
 
@@ -122,6 +142,7 @@ def main() -> int:
 
     df = transformar(extraer(args.desde, args.hasta))
     log.info("Resumen:\n%s", df.groupby("indicador")["fecha"].agg(["min", "max", "count"]))
+    revisar_atraso(df)
 
     if args.local:
         Path("data").mkdir(exist_ok=True)
