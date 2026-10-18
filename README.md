@@ -89,6 +89,7 @@ cd dbt/retail_pulse && dbt build --profiles-dir .
 - **Carga idempotente (`WRITE_TRUNCATE`)**: el pipeline se puede re-ejecutar sin duplicar datos.
 - **Último dólar disponible**: los fines de semana y feriados no hay dólar observado, así que se arrastra el último valor publicado.
 - **RFM adaptado a los datos**: recencia y monto se puntúan por percentiles, pero la frecuencia usa el número de compras directo, porque el 69 % de los clientes compra una sola vez y los quintiles separarían al azar a clientes idénticos.
+- **Cohortes con grilla completa**: `fct_retencion_cohortes` genera todas las combinaciones cohorte × mes (con 0 % donde nadie compró) y marca el mes en curso, que está incompleto, para no subestimar la retención en el dashboard.
 - **Reglas de negocio en un seed**: la grilla R×F → segmento vive en `seeds/segmentos_rfm.csv`, editable sin tocar SQL y validada por un test que exige las 25 combinaciones.
 - **Minimización de datos personales**: los modelos no exponen nombres, emails ni direcciones.
 - **Sin credenciales en el repo**: se usan credenciales por defecto de Google y secretos de GitHub.

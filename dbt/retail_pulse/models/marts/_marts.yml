@@ -57,3 +57,20 @@ models:
                 values: ['Campeones', 'Leales', 'Potencial leal', 'Nuevos', 'Prometedores',
                          'Necesitan atención', 'A punto de dormir', 'En riesgo',
                          'No se pueden perder', 'Hibernando']
+
+  - name: fct_retencion_cohortes
+    description: >
+      Una fila por cohorte mensual (mes de la primera compra) y meses transcurridos.
+      Incluye meses sin compras (0%) para que el heatmap no tenga huecos.
+    columns:
+      - name: mes_cohorte
+        tests: [not_null]
+      - name: meses_desde_primera_compra
+        tests: [not_null]
+      - name: clientes_activos
+        description: Clientes de la cohorte con al menos una compra válida en mes_actividad.
+      - name: tasa_retencion
+        description: clientes_activos / clientes_cohorte (0 a 1).
+        tests: [not_null]
+      - name: es_mes_en_curso
+        description: True para el mes actual, que aún está incompleto y subestima la retención.
