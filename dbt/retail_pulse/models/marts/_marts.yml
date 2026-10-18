@@ -15,3 +15,45 @@ models:
       - name: dolar_clp
         description: Último dólar observado a esa fecha (mindicador.cl).
       - name: venta_neta_clp
+
+  - name: dim_clientes_rfm
+    description: >
+      Una fila por cliente con al menos una compra válida. Puntajes RFM (1-5),
+      segmento de negocio y acción sugerida según la grilla de seeds/segmentos_rfm.csv.
+    columns:
+      - name: user_id
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_users')
+                field: user_id
+      - name: fecha_primera_compra
+        description: Base para el análisis de cohortes.
+      - name: recencia_dias
+        description: Días entre la última compra y fecha_calculo.
+      - name: frecuencia
+        description: Órdenes distintas con al menos un ítem válido.
+      - name: monto_usd
+        description: Venta neta total del cliente (sin cancelados ni devueltos).
+      - name: r_score
+        tests: &puntaje_1_a_5
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5]
+                quote: false
+      - name: f_score
+        description: Igual a la frecuencia (tope 5); no usa percentiles porque el 69% compra una sola vez.
+        tests: *puntaje_1_a_5
+      - name: m_score
+        tests: *puntaje_1_a_5
+      - name: segmento
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Campeones', 'Leales', 'Potencial leal', 'Nuevos', 'Prometedores',
+                         'Necesitan atención', 'A punto de dormir', 'En riesgo',
+                         'No se pueden perder', 'Hibernando']

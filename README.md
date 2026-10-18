@@ -35,7 +35,7 @@ Un e-commerce necesita responder todos los días, sin trabajo manual:
 | Capa | Herramienta | Qué hace |
 |---|---|---|
 | Ingesta | Python, `requests`, `pandas` | Descarga dólar, UF e IPC, avisa si alguno viene atrasado en la fuente y los carga en BigQuery (idempotente) |
-| Almacenamiento | BigQuery | Datasets `raw`, `staging`, `marts` |
+| Almacenamiento | BigQuery | Datasets `raw`, `staging`, `marts`, `seeds` |
 | Transformación | dbt | Limpieza, modelado dimensional y conversión USD→CLP |
 | Calidad | dbt tests | Unicidad, nulos, integridad referencial, frescura de fuentes |
 | Orquestación | GitHub Actions | Ejecución diaria y manual |
@@ -56,6 +56,7 @@ retail-pulse/
 ├── dbt/retail_pulse/
 │   ├── models/staging/             # Limpieza 1:1 de las fuentes + tests
 │   ├── models/marts/               # Tablas listas para el negocio
+│   ├── seeds/                      # Tablas de referencia en CSV (grilla de segmentos RFM)
 │   └── tests/                      # Tests de negocio personalizados
 ├── .github/workflows/pipeline.yml  # Ejecución diaria
 └── docs/SETUP.md                   # Guía paso a paso de configuración
@@ -87,5 +88,7 @@ cd dbt/retail_pulse && dbt build --profiles-dir .
 
 - **Carga idempotente (`WRITE_TRUNCATE`)**: el pipeline se puede re-ejecutar sin duplicar datos.
 - **Último dólar disponible**: los fines de semana y feriados no hay dólar observado, así que se arrastra el último valor publicado.
+- **RFM adaptado a los datos**: recencia y monto se puntúan por percentiles, pero la frecuencia usa el número de compras directo, porque el 69 % de los clientes compra una sola vez y los quintiles separarían al azar a clientes idénticos.
+- **Reglas de negocio en un seed**: la grilla R×F → segmento vive en `seeds/segmentos_rfm.csv`, editable sin tocar SQL y validada por un test que exige las 25 combinaciones.
 - **Minimización de datos personales**: los modelos no exponen nombres, emails ni direcciones.
 - **Sin credenciales en el repo**: se usan credenciales por defecto de Google y secretos de GitHub.

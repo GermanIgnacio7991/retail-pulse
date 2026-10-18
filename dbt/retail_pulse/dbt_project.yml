@@ -6,6 +6,7 @@ profile: retail_pulse
 model-paths: ["models"]
 test-paths: ["tests"]
 macro-paths: ["macros"]
+seed-paths: ["seeds"]
 
 models:
   retail_pulse:
@@ -15,3 +16,12 @@ models:
     marts:
       +materialized: table
       +schema: marts
+
+# Tablas de referencia versionadas como CSV (dbt seed)
+seeds:
+  retail_pulse:
+    +schema: seeds
+    segmentos_rfm:
+      +column_types:
+        r_score: int64
+        f_score: int64

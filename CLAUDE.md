@@ -41,6 +41,9 @@ dbt build --profiles-dir .                 # modelos + tests
 - [x] Semana 1 — Ingesta: 4.895 filas cargadas (dólar 2019→hoy, UF, IPC).
 - [x] Semana 2 — dbt: `dbt build` → PASS=26, WARN=0, ERROR=0. `marts.fct_ventas_diarias` ≈ 47k filas (día × categoría).
 - [ ] Semana 3 — Segmentación RFM (`dim_clientes_rfm`), cohortes de retención, dashboard (Looker Studio o Power BI).
+  - [x] RFM: `marts.dim_clientes_rfm` ≈ 66k clientes + seed `segmentos_rfm` (grilla R×F). `dbt build` → PASS=40. F = n° de compras (no quintiles: 69% compra 1 vez, máx 4).
+  - [ ] Cohortes (usar `fecha_primera_compra` de `dim_clientes_rfm`).
+  - [ ] Dashboard.
 - [ ] Semana 4 — Detección de anomalías por categoría + alertas (email/Slack) + reporte semanal en lenguaje natural con un LLM.
 - [ ] Semana 5 — Completar sección "Hallazgos" del README con números reales, video demo, post en LinkedIn.
 
