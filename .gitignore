@@ -13,6 +13,7 @@ venv/
 dbt/retail_pulse/target/
 dbt/retail_pulse/dbt_packages/
 dbt/retail_pulse/logs/
+dbt/retail_pulse/.user.yml
 
 # Salidas locales
 data/

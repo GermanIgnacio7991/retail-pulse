@@ -10,12 +10,14 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('stg_users')
-              field: user_id
+              arguments:
+                to: ref('stg_users')
+                field: user_id
       - name: estado
         tests:
           - accepted_values:
-              values: ['processing', 'shipped', 'complete', 'cancelled', 'returned']
+              arguments:
+                values: ['processing', 'shipped', 'complete', 'cancelled', 'returned']
 
   - name: stg_order_items
     description: Una fila por producto dentro de una orden.
@@ -26,15 +28,17 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('stg_orders')
-              field: order_id
+              arguments:
+                to: ref('stg_orders')
+                field: order_id
               config:
                 severity: warn   # ítems y órdenes pueden tener timestamps distintos en el borde de hoy
       - name: product_id
         tests:
           - relationships:
-              to: ref('stg_products')
-              field: product_id
+              arguments:
+                to: ref('stg_products')
+                field: product_id
 
   - name: stg_users
     columns:
