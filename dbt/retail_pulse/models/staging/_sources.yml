@@ -1,0 +1,24 @@
+version: 2
+
+sources:
+  - name: thelook
+    description: Dataset público de e-commerce (sintético, actualizado continuamente).
+    database: bigquery-public-data
+    schema: thelook_ecommerce
+    tables:
+      - name: orders
+      - name: order_items
+      - name: users
+      - name: products
+
+  - name: raw
+    description: Datos cargados por los scripts de ingesta del proyecto.
+    database: "{{ env_var('GCP_PROJECT_ID') }}"
+    schema: "{{ env_var('BQ_RAW_DATASET', 'raw') }}"
+    tables:
+      - name: indicadores_economicos
+        description: Dólar, UF e IPC desde mindicador.cl
+        loaded_at_field: cargado_en
+        freshness:
+          warn_after: {count: 2, period: day}
+          error_after: {count: 4, period: day}

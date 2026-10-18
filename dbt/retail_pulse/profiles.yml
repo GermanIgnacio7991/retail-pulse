@@ -1,0 +1,14 @@
+# Sin secretos: usa las credenciales por defecto de Google (ADC).
+# Local:  gcloud auth application-default login
+# CI:     la acción google-github-actions/auth configura las credenciales
+retail_pulse:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('GCP_PROJECT_ID') }}"
+      dataset: retail_pulse
+      location: "{{ env_var('BQ_LOCATION', 'US') }}"
+      threads: 4
+      job_execution_timeout_seconds: 300

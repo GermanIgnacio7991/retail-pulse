@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Secretos (NUNCA subir credenciales)
+.env
+*.json
+!dbt/retail_pulse/package-lock.json
+
+# dbt
+dbt/retail_pulse/target/
+dbt/retail_pulse/dbt_packages/
+dbt/retail_pulse/logs/
+
+# Salidas locales
+data/
+*.csv

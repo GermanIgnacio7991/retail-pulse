@@ -1,0 +1,40 @@
+name: Pipeline diario
+
+on:
+  schedule:
+    - cron: "17 10 * * *"   # 07:17 hora de Chile (10:17 UTC)
+  workflow_dispatch:         # botón para correrlo a mano
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    env:
+      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      BQ_RAW_DATASET: raw
+      BQ_LOCATION: US
+      DBT_PROFILES_DIR: dbt/retail_pulse
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Autenticar en Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Ingesta de indicadores
+        run: python ingestion/indicadores.py --desde 2019
+
+      - name: Frescura de fuentes
+        run: dbt source freshness --project-dir dbt/retail_pulse
+
+      - name: Modelos + tests (dbt build)
+        run: dbt build --project-dir dbt/retail_pulse

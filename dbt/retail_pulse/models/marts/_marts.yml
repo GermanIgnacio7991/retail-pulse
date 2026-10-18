@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: fct_ventas_diarias
+    description: >
+      Una fila por día y categoría. Base del dashboard ejecutivo y de las
+      alertas de anomalías (semana 4).
+    columns:
+      - name: fecha
+        tests: [not_null]
+      - name: categoria
+        tests: [not_null]
+      - name: venta_neta_usd
+        description: Ventas excluyendo ítems cancelados y devueltos.
+      - name: dolar_clp
+        description: Último dólar observado a esa fecha (mindicador.cl).
+      - name: venta_neta_clp
