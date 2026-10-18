@@ -46,7 +46,7 @@ dbt build --profiles-dir .                 # modelos + tests
 
 ## Pendientes conocidos (buenos primeros trabajos)
 1. ~~**Deprecaciones de dbt**~~ ✅ (18-oct-2026): `loaded_at_field`/`freshness` bajo `config:` en `_sources.yml` y argumentos de `relationships`/`accepted_values` bajo `arguments:` en `_staging.yml`. `dbt parse` sin advertencias.
-2. **Versiones de dbt** (18-oct-2026): fijadas en `requirements.txt` → `dbt-core==1.12.6`, `dbt-bigquery==1.12.1` (antes se coló la beta `1.13.0-b1`). **Falta:** reinstalar (`pip install -r requirements.txt`) y confirmar `dbt build` con 0 errores.
+2. ~~**Versiones de dbt**~~ ✅ (18-oct-2026): fijadas en `requirements.txt` → `dbt-core==1.12.6`, `dbt-bigquery==1.12.1` (antes se coló la beta `1.13.0-b1`). Reinstalado, desinstalado el plugin sobrante `dbt-state` (pedía login a dbt State) y `dbt build` OK.
 3. **IPC 2026 vino vacío** desde mindicador.cl (`/api/ipc/2026` → 0 registros). Investigar; el IPC aún no se usa en los marts.
 4. Configurar los secretos `GCP_SA_KEY` y `GCP_PROJECT_ID` en GitHub para que corra el workflow (ver `docs/SETUP.md` §4).
 
