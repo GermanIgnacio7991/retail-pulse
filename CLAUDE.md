@@ -15,7 +15,7 @@ Pipeline de BI automatizado de punta a punta para un e-commerce:
 - **Fuente de ventas**: dataset público `bigquery-public-data.thelook_ecommerce` (órdenes, ítems, usuarios, productos). Está en región **US**.
 - **Transformación** con dbt (`dbt/retail_pulse/`): `staging` (vistas) → `marts` (tablas). Datasets limpios gracias a la macro `generate_schema_name`.
 - **Calidad**: tests genéricos en `_staging.yml` / `_marts.yml` + tests singulares en `tests/`.
-- **Orquestación**: `.github/workflows/pipeline.yml`, diario 07:17 hora Chile (todavía sin secretos configurados en GitHub).
+- **Orquestación**: `.github/workflows/pipeline.yml`, diario 07:17 hora Chile. Corre en GitHub con la cuenta de servicio `pipeline-retail-pulse` (roles BigQuery Data Editor + Job User).
 
 ## Mi entorno
 - Windows + PowerShell en la terminal de VS Code. Entorno virtual en `.venv` (`.venv\Scripts\activate`).
@@ -48,7 +48,7 @@ dbt build --profiles-dir .                 # modelos + tests
 1. ~~**Deprecaciones de dbt**~~ ✅ (18-oct-2026): `loaded_at_field`/`freshness` bajo `config:` en `_sources.yml` y argumentos de `relationships`/`accepted_values` bajo `arguments:` en `_staging.yml`. `dbt parse` sin advertencias.
 2. ~~**Versiones de dbt**~~ ✅ (18-oct-2026): fijadas en `requirements.txt` → `dbt-core==1.12.6`, `dbt-bigquery==1.12.1` (antes se coló la beta `1.13.0-b1`). Reinstalado, desinstalado el plugin sobrante `dbt-state` (pedía login a dbt State) y `dbt build` OK.
 3. ~~**IPC 2026 vino vacío**~~ ✅ (18-oct-2026): mindicador.cl dejó de actualizar el IPC después de dic-2025 (UTM, IMACEC y dólar sí están al día) → es la fuente, no el código. Se mantiene el IPC y `revisar_atraso()` en `indicadores.py` avisa con WARNING si un indicador supera `MAX_DIAS_ATRASO`. Si algún mart necesita IPC, evaluar la API del Banco Central (BDE).
-4. Configurar los secretos `GCP_SA_KEY` y `GCP_PROJECT_ID` en GitHub para que corra el workflow (ver `docs/SETUP.md` §4).
+4. ~~Secretos de GitHub~~ ✅ (18-oct-2026): `GCP_SA_KEY` y `GCP_PROJECT_ID` configurados; primera corrida manual en verde (1m 32s). Actions subidas a versiones con Node 24. Ojo: desde el 19-oct-2026 `ubuntu-latest` = Ubuntu 26; si falla una corrida, revisar eso primero.
 
 ## Convenciones de trabajo
 - Commits pequeños con mensajes claros en español (ej. "Agrega segmentación RFM"). Rama `main`.

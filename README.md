@@ -1,5 +1,7 @@
 # 🛒 Retail Pulse — BI automatizado para e-commerce
 
+[![Pipeline diario](https://github.com/GermanIgnacio7991/retail-pulse/actions/workflows/pipeline.yml/badge.svg)](https://github.com/GermanIgnacio7991/retail-pulse/actions/workflows/pipeline.yml)
+
 > Pipeline de datos de punta a punta que actualiza cada día las métricas de un retail, valida la calidad de los datos y alimenta un dashboard ejecutivo con ventas en USD y CLP.
 
 **Autor:** Germán Cortés Alegría · [LinkedIn](https://linkedin.com/in/german-ignacio)
