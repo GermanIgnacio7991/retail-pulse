@@ -43,7 +43,9 @@ dbt build --profiles-dir .                 # modelos + tests
 - [ ] Semana 3 — Segmentación RFM (`dim_clientes_rfm`), cohortes de retención, dashboard (Looker Studio o Power BI).
   - [x] RFM: `marts.dim_clientes_rfm` ≈ 66k clientes + seed `segmentos_rfm` (grilla R×F). `dbt build` → PASS=40. F = n° de compras (no quintiles: 69% compra 1 vez, máx 4).
   - [x] Cohortes: `marts.fct_retencion_cohortes` ≈ 4,5k filas (94 cohortes mensuales × meses transcurridos, grilla con ceros). `dbt build` → PASS=45. Retención mes 1: 3% (cohortes 2019) → 8,2% (2026); dataset sintético, no afirmar causas.
-  - [ ] Dashboard.
+  - [x] Dashboard Looker Studio (21-oct-2026): 3 páginas (Ventas, Clientes, Retención), público: https://datastudio.google.com/reporting/a7c23750-48b2-46d8-88f2-b01e4d611d46. Tasas como campos calculados SUM/SUM (`retencion_ponderada`, `tasa_devolucion_real`, `ticket_promedio_real`, `margen_pct`, `pct_recurrentes`); filtro fijo "Sin mes en curso" en Retención.
+  - [ ] Dashboard Power BI (mismo diseño de 3 páginas).
+  - [ ] Capturas de las 3 páginas en `docs/img/` para el README.
 - [ ] Semana 4 — Detección de anomalías por categoría + alertas (email/Slack) + reporte semanal en lenguaje natural con un LLM.
 - [ ] Semana 5 — Completar sección "Hallazgos" del README con números reales, video demo, post en LinkedIn.
 

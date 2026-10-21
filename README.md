@@ -1,6 +1,7 @@
 # 🛒 Retail Pulse — BI automatizado para e-commerce
 
 [![Pipeline diario](https://github.com/GermanIgnacio7991/retail-pulse/actions/workflows/pipeline.yml/badge.svg)](https://github.com/GermanIgnacio7991/retail-pulse/actions/workflows/pipeline.yml)
+[![Dashboard](https://img.shields.io/badge/Dashboard-Looker%20Studio-4285F4?logo=looker&logoColor=white)](https://datastudio.google.com/reporting/a7c23750-48b2-46d8-88f2-b01e4d611d46)
 
 > Pipeline de datos de punta a punta que actualiza cada día las métricas de un retail, valida la calidad de los datos y alimenta un dashboard ejecutivo con ventas en USD y CLP.
 
@@ -14,7 +15,7 @@ Un e-commerce necesita responder todos los días, sin trabajo manual:
 
 1. ¿Cómo van las ventas, el margen y el ticket promedio por categoría?
 2. ¿Cuánto representan en pesos chilenos, considerando el tipo de cambio del día?
-3. ¿Qué clientes son más valiosos y cuáles están en riesgo de irse? *(semana 3)*
+3. ¿Qué clientes son más valiosos y cuáles están en riesgo de irse?
 4. ¿Qué categoría tuvo una caída anormal y requiere atención? *(semana 4)*
 
 ## 🏗️ Arquitectura
@@ -39,7 +40,19 @@ Un e-commerce necesita responder todos los días, sin trabajo manual:
 | Transformación | dbt | Limpieza, modelado dimensional y conversión USD→CLP |
 | Calidad | dbt tests | Unicidad, nulos, integridad referencial, frescura de fuentes |
 | Orquestación | GitHub Actions | Ejecución diaria y manual |
-| Visualización | Power BI / Looker Studio | Dashboard ejecutivo *(semana 3)* |
+| Visualización | Looker Studio · Power BI *(en progreso)* | Dashboard ejecutivo de 3 páginas, actualizado cada día |
+
+## 📈 Dashboard
+
+**[▶ Ver dashboard en vivo (Looker Studio)](https://datastudio.google.com/reporting/a7c23750-48b2-46d8-88f2-b01e4d611d46)**: público, sin necesidad de iniciar sesión.
+
+| Página | Responde | Fuente (dbt) |
+|---|---|---|
+| **Ventas** | Venta neta en USD y CLP, margen, ticket y devoluciones por categoría, con variación vs. el período anterior | `fct_ventas_diarias` |
+| **Clientes** | Segmentos RFM, su peso en la venta y la acción sugerida para cada uno | `dim_clientes_rfm` |
+| **Retención** | Heatmap de cohortes mensuales y evolución de la retención al mes 1 | `fct_retencion_cohortes` |
+
+Las tasas (margen, devolución, retención) se recalculan desde sus componentes en cada nivel de agregación, en vez de promediar porcentajes.
 
 ## 📊 Hallazgos
 
