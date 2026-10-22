@@ -54,6 +54,10 @@ Un e-commerce necesita responder todos los días, sin trabajo manual:
 
 Las tasas (margen, devolución, retención) se recalculan desde sus componentes en cada nivel de agregación, en vez de promediar porcentajes.
 
+![Página Ventas](docs/img/dashboard_ventas.png)
+![Página Clientes](docs/img/dashboard_clientes.png)
+![Página Retención](docs/img/dashboard_retencion.png)
+
 ## 📊 Hallazgos
 
 > *Completa esta sección con números reales cuando tengas el dashboard. Ejemplos de formato:*
