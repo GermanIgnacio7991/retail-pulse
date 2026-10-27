@@ -37,7 +37,7 @@ cd dbt\retail_pulse
 dbt build --profiles-dir .                 # modelos + tests
 ```
 
-## Estado actual (18-oct-2026)
+## Estado actual (27-oct-2026)
 - [x] Semana 1 — Ingesta: 4.895 filas cargadas (dólar 2019→hoy, UF, IPC).
 - [x] Semana 2 — dbt: `dbt build` → PASS=26, WARN=0, ERROR=0. `marts.fct_ventas_diarias` ≈ 47k filas (día × categoría).
 - [ ] Semana 3 — Segmentación RFM (`dim_clientes_rfm`), cohortes de retención, dashboard (Looker Studio o Power BI).
@@ -45,6 +45,13 @@ dbt build --profiles-dir .                 # modelos + tests
   - [x] Cohortes: `marts.fct_retencion_cohortes` ≈ 4,5k filas (94 cohortes mensuales × meses transcurridos, grilla con ceros). `dbt build` → PASS=45. Retención mes 1: 3% (cohortes 2019) → 8,2% (2026); dataset sintético, no afirmar causas.
   - [x] Dashboard Looker Studio (21-oct-2026): 3 páginas (Ventas, Clientes, Retención), público: https://datastudio.google.com/reporting/a7c23750-48b2-46d8-88f2-b01e4d611d46. Tasas como campos calculados SUM/SUM (`retencion_ponderada`, `tasa_devolucion_real`, `ticket_promedio_real`, `margen_pct`, `pct_recurrentes`); filtro fijo "Sin mes en curso" en Retención.
   - [ ] Dashboard Power BI (mismo diseño de 3 páginas). Sin "Publicar en la web": no depender de la cuenta Duoc → `.pbix` en el repo + capturas + demo en video.
+    - Archivo: `dashboard/retail_pulse.pbix` (aún sin commit a propósito: es binario, subirlo una sola vez al terminar).
+    - [x] Conexión a BigQuery en modo Importar (3 marts), fecha/hora automáticas desactivadas.
+    - [x] Tabla `_Medidas` con medidas DAX (ventas, clientes, retención con `es_mes_en_curso = FALSE` dentro de la medida) + comparación año anterior (`... AA`, `Var %`, `Var ... (pp)`).
+    - [x] Tabla `Calendario` (años completos, marcada como tabla de fechas) relacionada 1:* con `fct_ventas_diarias[fecha]`.
+    - [x] Columnas no aditivas ocultas (`tasa_devolucion`, `ticket_promedio_usd`, `clientes`, `tasa_retencion`); IDs y scores en "No resumir".
+    - [ ] Página Ventas (a medias): tarjeta con 5 medidas base + `Var` como **etiquetas de referencia** con color por reglas (fx); quitar filtro "Active" de la segmentación de categoría; fecha fin del rango = último día con datos (no 31-dic, distorsiona la comparación). Filtro de fechas tipo "Entre", no relativo (el .pbix es una foto).
+    - [ ] Páginas Clientes y Retención (heatmap con matriz + medida `Retención`).
   - [x] Capturas de las 3 páginas en `docs/img/dashboard_*.png`, mostradas en el README.
 - [ ] Semana 4 — Detección de anomalías por categoría + alertas (email/Slack) + reporte semanal en lenguaje natural con un LLM.
 - [ ] Semana 5 — Completar sección "Hallazgos" del README con números reales, video demo, post en LinkedIn.
